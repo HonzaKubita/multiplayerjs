@@ -16,6 +16,9 @@ function getWebSocketServer(server) {
         // Create a player with this socket (player will handle socket events)
         const player = new Player(socket);
 
+        // Send the playerId to the client
+        socket.send("playerId", { playerId: player.id });
+
         gameManager.players[player.id] = player;
     });
 
