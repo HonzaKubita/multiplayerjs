@@ -37,6 +37,10 @@ export default class MultiplayerJSClient {
             }
         };
 
+        this.socket.onclose = () => {
+            console.log("[MultiplayerJS] Connection closed");
+        }
+
         return new Promise((resolve, reject) => {
             this.socket.onopen = () => {
                 console.log("[MultiplayerJS] Connection successful");
@@ -51,10 +55,16 @@ export default class MultiplayerJSClient {
     }
 
     send(eventName, data) {
-        this.socket.send(JSON.stringify({ eventName, data }));
+        const payload = { eventName, data };
+        console.log(payload);
+        this.socket.send(JSON.stringify(payload));
     }
 
-    joinLobby(lobbyCode) {
-        this.send("joinLobby", { lobbyCode });
+    joinLobby(lobbyCode, name) {
+        this.send("joinLobby", { lobbyCode, name });
+    }
+
+    hostLobby(name) {
+        this.send("hostLobby", { name });
     }
 }
