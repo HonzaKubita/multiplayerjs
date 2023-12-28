@@ -30,7 +30,7 @@ module.exports = class Game {
 
     removePlayer(playerId) {
         this.players = this.players.filter(player => player.id != playerId);
-        this.broadcast("playerLeft", { id: playerId });
+        this.broadcast("playerLeft", { playerId: playerId });
     }
 
     start() {
