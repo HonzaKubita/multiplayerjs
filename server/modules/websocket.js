@@ -3,8 +3,6 @@ const gameManager = require('./gameManager');
 const SocketWrapper = require('./socketWrapper');
 const Player = require('../models/player');
 
-const util = require('util');
-
 function getWebSocketServer(server) {
     const wss = new WebSocket.Server({ noServer: true });
 
