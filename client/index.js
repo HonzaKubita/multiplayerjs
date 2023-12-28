@@ -23,9 +23,9 @@ export default class MultiplayerJSClient {
         this.callbacks[eventName] = this.callbacks[eventName].filter(cb => cb !== callback);
     }
 
-    connect() {
-        console.log(`[MultiplayerJS] Connecting to server... (ws://${window.location.hostname}:3000/)`);
-        this.socket = new WebSocket(`ws://${window.location.hostname}:3000/`);
+    connect(url = `ws://${window.location.hostname}:3000`) {
+        console.log(`[MultiplayerJS] Connecting to server... (${url})`);
+        this.socket = new WebSocket(url);
 
         this.socket.onmessage = (event) => {
             const { eventName, data } = JSON.parse(event.data);
