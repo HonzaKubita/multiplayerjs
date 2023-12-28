@@ -1,5 +1,6 @@
 const { uuidv4, checkNameError } = require('../utils');
 const gameManager = require('../modules/gameManager');
+const { it } = require('node:test');
 
 module.exports = class Player {
     constructor(socket) {
@@ -11,6 +12,7 @@ module.exports = class Player {
         // Initialize player variables
         this.name = "";
         this.lobbyCode = "";
+        this.isMaster = false;
 
         // Bind socket events
         this.socket.on("joinLobby", this.joinLobby.bind(this));
@@ -23,7 +25,8 @@ module.exports = class Player {
         return {
             id: this.id,
             name: this.name,
-            lobbyCode: this.lobbyCode
+            lobbyCode: this.lobbyCode,
+            isMaster: this.isMaster,
         };
     }
 
@@ -76,6 +79,9 @@ module.exports = class Player {
 
         // Save the lobby code
         this.lobbyCode = lobbyCode;
+
+        // Set this player as the master
+        this.isMaster = true;
 
         // Join the lobby (should not fail as the lobby was just created)
         gameManager.joinPlayerToGame(lobbyCode, this);
