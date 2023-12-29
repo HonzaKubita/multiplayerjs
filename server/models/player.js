@@ -17,6 +17,7 @@ module.exports = class Player {
         // Bind socket events
         this.socket.on("joinLobby", this.joinLobby.bind(this));
         this.socket.on("hostLobby", this.hostLobby.bind(this));
+        this.socket.on("startGame", this.startGame.bind(this));
         // Bind socket.ws close event
         this.socket.ws.on("close", this.leave.bind(this));
     }
@@ -93,5 +94,22 @@ module.exports = class Player {
     leave() {
         // Remove the player from the game
         gameManager.removePlayerFromGame(this.lobbyCode, this.id);
+    }
+
+    startGame() {
+        // Check if the player is the master
+        if (!this.isMaster) {
+            this.socket.send("startGameError", {error: "Only the master can start the game"});
+            return;
+        }
+
+        // Check if the player is in a game
+        if (!this.lobbyCode) {
+            this.socket.send("startGameError", {error: "You are not in a game"});
+            return;
+        }
+
+        // Start the game
+        gameManager.getGameByCode(this.lobbyCode).start();
     }
 }
