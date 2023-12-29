@@ -1,6 +1,5 @@
 const { uuidv4, checkNameError } = require('../utils');
 const gameManager = require('../modules/gameManager');
-const { it } = require('node:test');
 
 module.exports = class Player {
     constructor(socket) {
