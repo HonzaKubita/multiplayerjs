@@ -67,4 +67,8 @@ export default class MultiplayerJSClient {
     hostLobby(name) {
         this.send("hostLobby", { name });
     }
+
+    startGame() {
+        this.send("startGame", {});
+    }
 }
