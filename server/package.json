@@ -7,7 +7,7 @@
     "util": "^0.12.5"
   },
   "name": "multiplayerjs-server",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Server side package of multiplayerjs. Multiplayerjs is a library used for creating simple web online games with a lobby system.",
   "main": "index.js",
   "repository": "https://github.com/HonzaKubita/multiplayerjs",
