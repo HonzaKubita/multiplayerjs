@@ -83,8 +83,8 @@ export default class MultiplayerJSClient {
             throw new Error(data.error);
         };
 
-        this.on("joinLobbySuccess", joinLobbySuccess);
-        this.on("joinLobbyError", joinLobbyError);
+        this.on("joinLobbySuccess", joinLobbySuccess.bind(this));
+        this.on("joinLobbyError", joinLobbyError.bind(this));
 
         this.send("joinLobby", { lobbyCode, name });
     }
@@ -105,8 +105,8 @@ export default class MultiplayerJSClient {
             throw new Error(data.error);
         };
 
-        this.on("hostLobbySuccess", hostLobbySuccess);
-        this.on("hostLobbyError", hostLobbyError);
+        this.on("hostLobbySuccess", hostLobbySuccess.bind(this));
+        this.on("hostLobbyError", hostLobbyError.bind(this));
 
         this.send("hostLobby", { name });
     }
@@ -125,8 +125,8 @@ export default class MultiplayerJSClient {
             throw new Error(data.error);
         };
 
-        this.on("startGameSuccess", startGameSuccess);
-        this.on("startGameError", startGameError);
+        this.on("startGameSuccess", startGameSuccess.bind(this));
+        this.on("startGameError", startGameError.bind(this));
 
         this.send("startGame", {});
     }
