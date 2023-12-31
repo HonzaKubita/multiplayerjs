@@ -1,5 +1,6 @@
 const express = require("express");
 const { getWebSocketServer } = require('./modules/websocket');
+const settings = require('./modules/settings');
 
 module.exports = class MultiplayerJSServer {
     constructor() {
@@ -8,6 +9,8 @@ module.exports = class MultiplayerJSServer {
 
         this.wss = null;
         this.server = null;
+
+        this.settings = settings;
     }
 
     static() {

@@ -6,17 +6,6 @@ function uuidv4() {
     );
 }
 
-function checkNameError(name) {
-    if (name.length < 1) {
-        return "Name must be at least 1 character";
-    }
-    if (name.length > 20) {
-        return "Name must be at most 20 characters";
-    }
-    return null;
-}
-
 module.exports = {
     uuidv4,
-    checkNameError
 };

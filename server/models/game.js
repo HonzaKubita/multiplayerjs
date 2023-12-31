@@ -2,7 +2,7 @@ module.exports = class Game {
     constructor(lobbyCode) {
         this.lobbyCode = lobbyCode;
         this.players = [];
-        this.gameState = null;
+        this.gameState = "inLobby"; // inLobby is default when the game is created
     }
 
     // ws functions

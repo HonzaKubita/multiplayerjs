@@ -1,5 +1,6 @@
-const { uuidv4, checkNameError } = require('../utils');
+const { uuidv4 } = require('../utils');
 const gameManager = require('../modules/gameManager');
+const validators = require('../modules/validators');
 
 module.exports = class Player {
     constructor(socket) {
@@ -37,7 +38,7 @@ module.exports = class Player {
     joinLobby(data) {
         const { lobbyCode, name } = data;
         // Check name
-        const nameError = checkNameError(name);
+        const nameError = validators.checkNameError(name);
         if (nameError) {
             this.socket.send("joinLobbyError", {error: nameError});
             return;
@@ -65,7 +66,7 @@ module.exports = class Player {
         const { name } = data;
 
         // Check name
-        const nameError = checkNameError(name);
+        const nameError = validators.checkNameError(name);
         if (nameError) {
             this.socket.send("hostLobbyError", {error: nameError});
             return;
@@ -83,7 +84,7 @@ module.exports = class Player {
         // Set this player as the master
         this.isMaster = true;
 
-        // Join the lobby (should not fail as the lobby was just created)
+        // Join the lobby (should not return any error as the lobby was just created)
         gameManager.joinPlayerToGame(lobbyCode, this);
    
         // Send the lobby code back to the client
@@ -109,6 +110,11 @@ module.exports = class Player {
         }
 
         // Start the game
-        gameManager.getGameByCode(this.lobbyCode).start();
+        const startGameError = gameManager.startGame(this.lobbyCode);
+        if (startGameError) {
+            this.socket.send("startGameError", {error: startGameError});
+        } else {
+            this.socket.send("startGameSuccess");
+        }
     }
 }

@@ -5,6 +5,13 @@ export default class MultiplayerJSClient {
         this.callbacks = {
             // eventName: [callback, callback, ...]
         };
+
+        this.playerId = null;
+
+        this.on("playerId", (data) => {
+            console.log(`[MultiplayerJS] Received playerId: ${data.playerId}`)
+            this.playerId = data.playerId;
+        });
     }
 
     on(eventName, callback) {
@@ -61,14 +68,66 @@ export default class MultiplayerJSClient {
     }
 
     joinLobby(lobbyCode, name) {
+        // Prepare callbacks
+        const joinLobbySuccess = (data) => {
+            this.removeCallback("joinLobbySuccess", joinLobbySuccess);
+            this.removeCallback("joinLobbyError", joinLobbyError);
+
+            return data.players;
+        };
+
+        const joinLobbyError = (data) => {
+            this.removeCallback("joinLobbySuccess", joinLobbySuccess);
+            this.removeCallback("joinLobbyError", joinLobbyError);
+
+            throw new Error(data.error);
+        };
+
+        this.on("joinLobbySuccess", joinLobbySuccess);
+        this.on("joinLobbyError", joinLobbyError);
+
         this.send("joinLobby", { lobbyCode, name });
     }
 
     hostLobby(name) {
+        // Prepare callbacks
+        const hostLobbySuccess = (data) => {
+            this.removeCallback("hostLobbySuccess", hostLobbySuccess);
+            this.removeCallback("hostLobbyError", hostLobbyError);
+
+            return data.lobbyCode;
+        };
+
+        const hostLobbyError = (data) => {
+            this.removeCallback("hostLobbySuccess", hostLobbySuccess);
+            this.removeCallback("hostLobbyError", hostLobbyError);
+
+            throw new Error(data.error);
+        };
+
+        this.on("hostLobbySuccess", hostLobbySuccess);
+        this.on("hostLobbyError", hostLobbyError);
+
         this.send("hostLobby", { name });
     }
 
     startGame() {
+        // Prepare callbacks
+        const startGameSuccess = (data) => {
+            this.removeCallback("startGameSuccess", startGameSuccess);
+            this.removeCallback("startGameError", startGameError);
+        };
+
+        const startGameError = (data) => {
+            this.removeCallback("startGameSuccess", startGameSuccess);
+            this.removeCallback("startGameError", startGameError);
+
+            throw new Error(data.error);
+        };
+
+        this.on("startGameSuccess", startGameSuccess);
+        this.on("startGameError", startGameError);
+
         this.send("startGame", {});
     }
 }
